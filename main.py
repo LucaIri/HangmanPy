@@ -28,6 +28,7 @@ def target_word_selection(word_list):
     return target_word
 
 def player_guess(target, unsolved):
+    list_unsolved = list(unsolved)
     guess = input("Guess a letter!: \n").upper()
     if len(guess)>1:
         print("Only 1 character at a time! Try Again")
@@ -35,8 +36,10 @@ def player_guess(target, unsolved):
     if guess in target:
         for i in range(len(unsolved)):
             if target[i] == guess:
-                unsolved = unsolved.replace(unsolved[i], guess)
-    print(unsolved)
+                list_unsolved[i] = guess
+    str_unsolved = "".join(list_unsolved)
+    print()
+    underscore_target_output(str_unsolved)
     
     
 
