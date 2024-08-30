@@ -8,67 +8,74 @@ def greeting():
     hint_message = "HINT: country names ;)\n"
     print(hint_message)
     print("Guess this word: ")
+class word:
+    def __init__(self, target, blanks, valid):
+        self.target = ""
+        self.blanks = ""
+        self.valid = False
+
+    #determines target word, returns target word
+    def target_word_selection(self, word_list):
+        target_word = random.choice(word_list)
+        self.target =target_word
+
     
 
-#prints string of '_' representing the unsolved word,
-#  returns the string
-def print_blanks(target):    
-    underscore_target = ""
-    for i in range(len(target)):
-        if target[i] != ' ':
-            underscore_target += '_'
-        else:
-            underscore_target += ' '
-    
-    blank_output = underscore_target_output(underscore_target)
-    print(blank_output)
-    return underscore_target
+    #prints string of '_' representing the unsolved word,
+    #  returns the string
+    def print_blanks(self):    
+        underscore_target = ""
+        for i in range(len(self.target)):
+            if self.target[i] != ' ':
+                underscore_target += '_'
+            else:
+                underscore_target += ' '
+        list(underscore_target)
+        joined_underscore_target = " ".join(underscore_target)
+        self.blanks = joined_underscore_target
+        print(self.blanks)  
 
-#takes in a string, joins it to look more presentable
-#  or user, returns string with spaces
-def underscore_target_output(target):
-    list(target)
-    joined_underscore_target = " ".join(target)
-    return joined_underscore_target
-    
 
-#determines target word, returns target word
-def target_word_selection(word_list):
-    target_word = random.choice(word_list)
-    return target_word
+    #handles player guesses, if player guess is 
+    # correct, the associated blanks will be replaced with the
+    #  guess, returns the unsolved string with blanks
+    def player_guess(self):
+        temp_blank = self.blanks.split(' ')
+        guess = input("Guess a letter!: ").upper()
+        if len(guess)>1:
+            print("Only 1 character at a time! Try Again")
+            self.player_guess()
+        if guess == 'q' or 'Q':
+            quit()
+        if guess in self.target:
+            for i in range(len(self.target)):
+                if self.target[i] == guess:
+                    temp_blank[i] = guess
+            print("\nNice! Keep Going!\n")
+            self.valid = True
+        if guess not in self.target:
+            self.valid = False
+            print("\nNot in word, try again!\n")
+        str_unsolved = " ".join(temp_blank)
+        self.blanks = str_unsolved
+        print(self.blanks)
 
-#handles player guesses, if player guess is 
-# correct, the associated blanks will be replaced with the
-#  guess, returns the unsolved string with blanks
-def player_guess(target, unsolved, count):
-    right_guess = False
-    list_unsolved = list(unsolved)
-    guess = input("Guess a letter!: \n").upper()
-    if len(guess)>1:
-        print("Only 1 character at a time! Try Again")
-        player_guess(target)
-    if guess in target:
-        for i in range(len(unsolved)):
-            if target[i] == guess:
-                list_unsolved[i] = guess
-                right_guess = True
-        print("Nice! Keep Going!\n")
-    if guess not in target:
-        count -= 1
-    str_unsolved = "".join(list_unsolved)
-    print()
-    return str_unsolved
+
+
     
     
-
+correct = word("","",False)
 guess_wrong_limit = 10
 target_word_list = ["ARGENTINA", "ANGOLA", "BRAZIL", "BOLIVIA","CANADA", "UNITED STATES", "DOMINICAN REPUBLIC", "RUSSIA", "SPAIN", "FRANCE", "MONGOLIA", "CHINA"]
-target_word = target_word_selection(target_word_list)
+correct.target_word_selection(target_word_list)
 greeting()
-underscore_target_no_space = print_blanks(target_word)
+correct.print_blanks()
 while guess_wrong_limit > 0:
-    underscore_target_no_space = player_guess(target_word, underscore_target_no_space, guess_wrong_limit)
-    print(underscore_target_output(underscore_target_no_space))
-    # if player_guess(target_word, underscore_target_no_space) != True:
-    #     guess_wrong_limit -= 1
-    #     print("Letter not found! {} mistakes remaining!".format(guess_wrong_limit))
+    correct.player_guess()
+    if correct.valid == False:
+        guess_wrong_limit -=1
+
+#    print(underscore_target_output(underscore_target_no_space))
+#    # if player_guess(target_word, underscore_target_no_space) != True:
+#    #     guess_wrong_limit -= 1
+#    #     print("Letter not found! {} mistakes remaining!".format(guess_wrong_limit))
